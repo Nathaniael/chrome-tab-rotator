@@ -1,30 +1,32 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "name": "Tab Rotate",
   "description": "Loop through a set of tabs - ideal for a Dashboard or Advertisement Display",
   "version": "0.6.2",
 
-  "browser_action": {
-    "default_icon": "img/Play-38.png",
+  "action": {
+    "default_icon": "src/images/Play-38.png",
     "default_title": "Start Tab Rotate"
   },
-  "options_page": "index.html",
+  "options_page": "src/index.html",
 
   "background": {
-    "scripts": ["background.js", "import-analytics.js", "hot-reload.js"]
+    "service_worker": "background.js"
   },
 
   "icons": {
-    "16": "img/Play-16.png",
-    "32": "img/Play-32.png",
-    "48": "img/Play-48.png",
-    "128": "img/Play-128.png"
+    "16": "src/images/Play-16.png",
+    "38": "src/images/Play-38.png",
+    "32": "src/images/Play-32.png",
+    "48": "src/images/Play-48.png",
+    "128": "src/images/Play-128.png"
   },
 
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com https://unpkg.com; object-src 'self'",
+  "permissions:": ["tabs"],
 
-  "permissions": [
+  "host_permissions": [
+    "idle",
     "storage",
     "https://ajax.googleapis.com/",
     "file://*/",

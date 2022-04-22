@@ -1,4 +1,3 @@
-import analytics from './analytics';
 import sampleConfig from './config.sample.json';
 
 const { chrome } = globalThis;
@@ -61,7 +60,6 @@ function readSettingsFromDisc() {
     chrome.storage.sync.get(null, (allStorage) => {
       if (isEmptyObject(allStorage)) {
         // This is the first use of the plugin
-        analytics.install();
         openSettingsPage();
         resolve({ ...DEFAULT_STORAGE_OBJECT });
       } else {

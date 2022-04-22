@@ -16,22 +16,20 @@ const buildJavascript = async () => {
     entryPoints: [
       'src/background.js',
       'src/settings.js',
-      'src/import-analytics.js',
       'src/hot-reload.js',
     ],
   }).catch(() => {});
 };
 
 const copyImages = async () => {
-  console.log('copyImages');
-  return cpy('src/img', 'dist/img');
+  console.log('Copy Images');
+  return cpy('src/images', 'dist');
 };
 
 const copyStatics = async () => {
-  console.log('copyStatics');
+  console.log('Copy Static Files');
   const statics = [
     'manifest.json',
-    'README.md',
     'src/index.html',
     'src/settings.css',
   ];

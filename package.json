@@ -6,8 +6,8 @@
     "ramda": "^0.26.1"
   },
   "devDependencies": {
-    "chokidar": "^2.1.0",
-    "cpy": "^8.1.2",
+    "chokidar": "^3.5.3",
+    "cpy": "^9.0.1",
     "esbuild": "^0.12.17",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",

@@ -1,4 +1,3 @@
-import analytics from './analytics';
 import sampleConfig from './config.sample.json';
 
 const { chrome, angular, document } = globalThis;
@@ -16,7 +15,6 @@ const settingsApp = angular.module('settingsApp', []);
 settingsApp.controller('SettingsCtrl', ($scope) => {
   console.log('init');
   const { jQuery } = globalThis;
-  analytics.optionsPageview();
 
   initScope(loadSampleConfig);
 

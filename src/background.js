@@ -1,4 +1,3 @@
-import analytics from './analytics';
 import dataLayer from './dataLayer';
 
 const { chrome } = globalThis;
@@ -8,7 +7,6 @@ let session = newSessionObject();
 async function init() {
   await dataLayer.reload();
   session.config = dataLayer.getConfig();
-  analytics.backgroundPageview();
 
   initEventListeners();
 
@@ -30,19 +28,32 @@ function newSessionObject() {
 
 function initEventListeners() {
   chrome.browserAction.onClicked.addListener(iconClicked);
+  chrome.idle.setDetectionInterval(15);
+  chrome.idle.onStateChanged.addListener(onStateChanged);
 }
 
 function iconClicked() {
-  if (session.isRotateEnabled) {
+  if (session.isRotateEnabled)
     pause();
-  } else {
+   else
     play();
+}
+
+function onStateChanged(newState) {
+  switch (newState) {
+    case 'active':
+      pause();
+      break;
+    case 'idle':
+      play();
+      break;
+    default:
+      break;
+
   }
 }
 
 async function play() {
-  analytics.play();
-
   chrome.browserAction.setIcon({ path: 'img/Pause-38.png' });
   chrome.browserAction.setTitle({ title: 'Pause Tab Rotate' });
   session = newSessionObject();
@@ -52,8 +63,6 @@ async function play() {
 }
 
 function pause() {
-  analytics.pause();
-
   chrome.browserAction.setIcon({ path: 'img/Play-38.png' });
   chrome.browserAction.setTitle({ title: 'Start Tab Rotate' });
   clearTimeout(session.timerId);
@@ -77,9 +86,6 @@ async function beginCycle(isFirstCycle = false) {
 async function rotateTabAndScheduleNextRotation(isFirstCycle) {
   // Break out of infinite loop when pause is clicked
   if (!session.isRotateEnabled) return;
-
-  const { playStartTime } = session;
-  analytics.analyticsHeartbeat(playStartTime);
 
   const currentTab = session.tabs[session.nextIndex];
 
