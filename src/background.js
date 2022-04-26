@@ -27,7 +27,7 @@ function newSessionObject() {
 }
 
 function initEventListeners() {
-  chrome.browserAction.onClicked.addListener(iconClicked);
+  chrome.action.onClicked.addListener(iconClicked);
   chrome.idle.setDetectionInterval(15);
   chrome.idle.onStateChanged.addListener(onStateChanged);
 }
@@ -42,9 +42,11 @@ function iconClicked() {
 function onStateChanged(newState) {
   switch (newState) {
     case 'active':
+      console.log('Paused');
       pause();
       break;
     case 'idle':
+      console.log('Resumed')
       play();
       break;
     default:
@@ -54,8 +56,8 @@ function onStateChanged(newState) {
 }
 
 async function play() {
-  chrome.browserAction.setIcon({ path: 'img/Pause-38.png' });
-  chrome.browserAction.setTitle({ title: 'Pause Tab Rotate' });
+  chrome.action.setIcon({ path: 'src/images/Pause-38.png' });
+  chrome.action.setTitle({ title: 'Pause Tab Rotate' });
   session = newSessionObject();
   session.isRotateEnabled = true;
   session.playStartTime = new Date().getTime();
@@ -63,8 +65,8 @@ async function play() {
 }
 
 function pause() {
-  chrome.browserAction.setIcon({ path: 'img/Play-38.png' });
-  chrome.browserAction.setTitle({ title: 'Start Tab Rotate' });
+  chrome.action.setIcon({ path: 'src/images/Play-38.png' });
+  chrome.action.setTitle({ title: 'Start Tab Rotate' });
   clearTimeout(session.timerId);
   session.isRotateEnabled = false;
 }

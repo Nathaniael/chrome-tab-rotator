@@ -10,12 +10,11 @@ const buildJavascript = async () => {
   return esbuild({
     sourcemap: 'inline',
     logLevel: 'info',
-    // minify: true,
     bundle: true,
     outdir: 'dist',
     entryPoints: [
       'src/background.js',
-      'src/settings.js',
+      'src/options.js',
       'src/hot-reload.js',
     ],
   }).catch(() => {});
@@ -30,8 +29,11 @@ const copyStatics = async () => {
   console.log('Copy Static Files');
   const statics = [
     'manifest.json',
-    'src/index.html',
-    'src/settings.css',
+    'src/options.html',
+    'src/options.css',
+    'src/bootstrap.min.css',
+    'src/prism.css',
+    'cdn/*'
   ];
   statics.forEach((file) => console.log(`  ${file}`));
   return cpy(statics, 'dist');
@@ -74,14 +76,6 @@ async function runLint() {
   console.log(resultText);
 }
 
-async function zip() {
-  // console.time('Zip created in');
-  const { version } = JSON.parse(fs.readFileSync('./manifest.json'));
-
-  await zipFolder('dist', `./zip/tab-rotate-${version}.zip`);
-  // console.timeEnd('Zip created in');
-}
-
 async function watch() {
   build();
 
@@ -96,7 +90,7 @@ async function watch() {
 function run() {
   const command = process.argv.slice(2);
   console.log('command: ', command);
-  const commands = { build, watch, zip };
+  const commands = { build, watch };
 
   commands[command]?.();
 }
