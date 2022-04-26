@@ -23,6 +23,7 @@ function newSessionObject() {
     timerId: null,
     playStartTime: 0,
     config: {},
+    startedOnce: false
   };
 }
 
@@ -33,10 +34,14 @@ function initEventListeners() {
 }
 
 function iconClicked() {
-  if (session.isRotateEnabled)
+  if (session.isRotateEnabled) {
     pause();
-   else
+    console.log('Paused with action button');
+  }
+   else {
     play();
+    console.log('Resumed with action button');
+   }
 }
 
 function onStateChanged(newState) {
@@ -56,17 +61,25 @@ function onStateChanged(newState) {
 }
 
 async function play() {
-  chrome.action.setIcon({ path: 'src/images/Pause-38.png' });
-  chrome.action.setTitle({ title: 'Pause Tab Rotate' });
-  session = newSessionObject();
-  session.isRotateEnabled = true;
-  session.playStartTime = new Date().getTime();
-  beginCycle(true);
+  if (!session.startedOnce) {
+    chrome.action.setIcon({ path: 'src/images/Pause-38.png' });
+    chrome.action.setTitle({ title: 'Pause tab rotation' });
+    session = newSessionObject();
+    session.isRotateEnabled = true;
+    session.playStartTime = new Date().getTime();
+    session.startedOnce = true;
+    beginCycle(true);
+  } else {
+    chrome.action.setIcon({ path: 'src/images/Pause-38.png' });
+    chrome.action.setTitle({ title: 'Pause tab rotation' });
+    session.playStartTime = new Date().getTime();
+    session.isRotateEnabled = true;
+  }
 }
 
 function pause() {
   chrome.action.setIcon({ path: 'src/images/Play-38.png' });
-  chrome.action.setTitle({ title: 'Start Tab Rotate' });
+  chrome.action.setTitle({ title: session.startedOnce ? 'Resume tab rotation' : 'Start tab rotation' });
   clearTimeout(session.timerId);
   session.isRotateEnabled = false;
 }
